@@ -12,8 +12,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-../../Kawa/PredictionRestApi.iml
-src/main/resources/application.yaml
+
+AutomaticBet.iml
 
 
 # Generated files
