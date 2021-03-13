@@ -1,7 +1,7 @@
 package org.automaticbet.parser;
 
 import lombok.RequiredArgsConstructor;
-import org.automaticbet.dto.DataResponseEntity;
+import org.automaticbet.dto.DataResponse;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class ExtractData {
 
 
-    public List<DataResponseEntity> extractionDataFromSite(String teamName, String teamName2) throws IOException {
+    public List<DataResponse> extractionDataFromSite(String teamName, String teamName2) throws IOException {
         String url = "https://www.efortuna.pl/wyszukiwanie";
         HashMap<String, String> formData = new HashMap<>();
         formData.put("searchValue", teamName + " " + teamName2);
@@ -43,14 +43,14 @@ public class ExtractData {
                 Exception ex) {
             ex.printStackTrace();
         }
-        List<DataResponseEntity> dataResponseEntityList = checkingDate(dataInfo, marketName, dateTime);
+        List<DataResponse> dataResponseList = checkingDate(dataInfo, marketName, dateTime);
 
-        dataResponseEntityList = dataResponseEntityList.stream()
-                .filter(dataResponseEntity -> containsInscription(dataResponseEntity.getEventName(), Arrays.asList(teamName.split(" ")), 1))
-                .filter(dataResponseEntity -> containsInscription(dataResponseEntity.getEventName(), Arrays.asList(teamName2.split(" ")), 2))
+        dataResponseList = dataResponseList.stream()
+                .filter(dataResponse -> containsInscription(dataResponse.getEventName(), Arrays.asList(teamName.split(" ")), 1))
+                .filter(dataResponse -> containsInscription(dataResponse.getEventName(), Arrays.asList(teamName2.split(" ")), 2))
                 .collect(toList());
 
-        return dataResponseEntityList;
+        return dataResponseList;
     }
 
     public boolean containsInscription(String marketName, List<String> name, int teamNumber) {
@@ -91,9 +91,9 @@ public class ExtractData {
         return contains;
     }
 
-    public List<DataResponseEntity> checkingDate(List<Elements> dataInfo, List<Elements> marketName, List<Elements> dateTime) {
+    public List<DataResponse> checkingDate(List<Elements> dataInfo, List<Elements> marketName, List<Elements> dateTime) {
         String today = new Date().toString().substring(8, 10);
-        List<DataResponseEntity> entities = new ArrayList<>();
+        List<DataResponse> entities = new ArrayList<>();
 
         for (int i = 0; i < dateTime.size(); i++) {
             if (dateTime.get(i).text().substring(0, 2).equals(today)) {
@@ -103,8 +103,8 @@ public class ExtractData {
         return entities;
     }
 
-    public DataResponseEntity buildEntity(Elements dataInfo, Elements marketName, Elements dateTime) {
-        DataResponseEntity dataResponseEntity = DataResponseEntity.builder()
+    public DataResponse buildEntity(Elements dataInfo, Elements marketName, Elements dateTime) {
+        DataResponse dataResponse = DataResponse.builder()
                 .eventName(marketName.text())
                 .dataId((dataInfo.eachAttr("data-id")))
                 .dataValue(dataInfo.eachAttr("data-value"))
@@ -112,7 +112,7 @@ public class ExtractData {
                 .date(dateTime.text())
                 .build();
 
-        return dataResponseEntity;
+        return dataResponse;
     }
 }
 

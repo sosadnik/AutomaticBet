@@ -1,15 +1,14 @@
 package org.automaticbet;
 
 import lombok.RequiredArgsConstructor;
-import org.automaticbet.dto.DataResponseEntity;
 import org.automaticbet.parser.ExtractData;
-import org.automaticbet.parser.LoginClient;
+import org.automaticbet.parser.WebClient;
+import org.automaticbet.service.PredictionService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.List;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -17,7 +16,8 @@ public class Main implements CommandLineRunner {
 
 
     private final ExtractData extractData;
-    private final LoginClient loginClient;
+    private final WebClient webClient;
+    private final PredictionService service;
 
 
     public static void main(String[] args) {
@@ -28,9 +28,9 @@ public class Main implements CommandLineRunner {
     public void run(String... args) throws IOException {
         System.out.println("=======main======");
 
-        List<DataResponseEntity> entities = extractData.extractionDataFromSite("Excelsior", "Jong Utrecht");
-        entities.forEach(dataResponseEntity -> System.out.println(dataResponseEntity.getEventName()));
-//        loginClient.StsLogin();
+        //List<DataResponse> entities = extractData.extractionDataFromSite("Excelsior", "Jong Utrecht");
+       // entities.forEach(dataResponse -> System.out.println(dataResponse.getEventName()));
+        System.out.println(service.getPrediction());;
 
 
     }

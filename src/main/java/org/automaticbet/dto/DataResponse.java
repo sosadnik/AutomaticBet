@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class DataResponseEntity {
+public class DataResponse {
 
     private String eventName;
     private String dataInfo;
