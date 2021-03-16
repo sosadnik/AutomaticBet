@@ -1,4 +1,4 @@
-package org.automaticbet.parser;
+package org.automaticbet.service;
 
 import org.automaticbet.dto.DataResponse;
 import org.jsoup.Connection;
@@ -15,7 +15,7 @@ public class WebClient {
     public Map<String, String> login() throws IOException {
         String loginActionUrl = "https://www.efortuna.pl/client_security_check";
         String username = "agzer";
-        String password = "Y5Bl0P4RwZb5XHxNMntA8KBwkBAQkEC4";
+        String password = "NzkI0-xA76LJ7IxNsgsQUMAwcOCwMODo";
         HashMap<String, String> formData = new HashMap<>();
 
         formData.put("username", username);
@@ -36,20 +36,20 @@ public class WebClient {
                 + bet.getDataInfo() + "/"
                 + bet.getDataId().get(getPredictionIndex(prediction)) + "/"
                 + bet.getDataValue().get(getPredictionIndex(prediction));
-
+        System.out.println("addBet");
         connection(url, cookies);
     }
 
-    public void changeBetValue(Map<String, String> cookies, int value) throws IOException {
+    public void changeBetValue(Map<String, String> cookies) throws IOException {
 
-        String url = "https://www.efortuna.pl/ticket/ajax/M/1/changebetval/" + value;
-
+        String url = "https://www.efortuna.pl/ticket/ajax/M/1/changebetval/2";
+        System.out.println("changeBetValue");
         connection(url, cookies);
     }
 
     public void placeBet(Map<String, String> cookies) throws IOException {
         String url = "https://www.efortuna.pl/ticket/ajax/M/1/acceptticket/NONE";
-
+        System.out.println("placeBet");
         connection(url, cookies);
     }
 
@@ -60,13 +60,7 @@ public class WebClient {
                 .ignoreContentType(true)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36")
                 .execute();
-    }
-
-
-    public void logout(Map<String, String> cookies) throws IOException {
-        String url = "https://www.efortuna.pl/logout";
-
-        connection(url, cookies);
+        System.out.println(homePage.parse().text());
     }
 
     public int getPredictionIndex(String prediction) {

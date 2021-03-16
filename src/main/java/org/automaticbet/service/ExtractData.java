@@ -1,4 +1,4 @@
-package org.automaticbet.parser;
+package org.automaticbet.service;
 
 import lombok.RequiredArgsConstructor;
 import org.automaticbet.dto.DataResponse;
@@ -9,7 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -18,8 +17,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class ExtractData {
 
-
-    public List<DataResponse> extractionDataFromSite(String teamName, String teamName2) throws IOException {
+    public List<DataResponse> extractionDataFromSite(String teamName, String teamName2) {
         String url = "https://www.efortuna.pl/wyszukiwanie";
         HashMap<String, String> formData = new HashMap<>();
         formData.put("searchValue", teamName + " " + teamName2);
@@ -59,7 +57,7 @@ public class ExtractData {
 
         if (teamNames.size() != 2) return false;
 
-        if (contains == false) {
+        if (!contains) {
             if (teamNumber == 1) {
                 contains = containsCommonElements(
                         buildsStringFromFirstLetter(Arrays.asList(teamNames.get(0).split(" "))),
@@ -83,9 +81,9 @@ public class ExtractData {
 
     public boolean containsCommonElements(List<String> list, List<String> listTwo) {
         boolean contains = false;
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < listTwo.size(); j++) {
-                if (list.get(i).contains(listTwo.get(j))) contains = true;
+        for (String s : list) {
+            for (String value : listTwo) {
+                if (s.contains(value)) contains = true;
             }
         }
         return contains;
@@ -104,7 +102,7 @@ public class ExtractData {
     }
 
     public DataResponse buildEntity(Elements dataInfo, Elements marketName, Elements dateTime) {
-        DataResponse dataResponse = DataResponse.builder()
+        return DataResponse.builder()
                 .eventName(marketName.text())
                 .dataId((dataInfo.eachAttr("data-id")))
                 .dataValue(dataInfo.eachAttr("data-value"))
@@ -112,7 +110,6 @@ public class ExtractData {
                 .date(dateTime.text())
                 .build();
 
-        return dataResponse;
     }
 }
 

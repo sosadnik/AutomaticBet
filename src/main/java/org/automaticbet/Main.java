@@ -1,26 +1,18 @@
 package org.automaticbet;
 
 import lombok.RequiredArgsConstructor;
-import org.automaticbet.dto.DataResponse;
-import org.automaticbet.parser.ExtractData;
-import org.automaticbet.parser.WebClient;
-import org.automaticbet.service.PredictionService;
+import org.automaticbet.service.AutomaticBetService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.util.List;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 public class Main implements CommandLineRunner {
 
-
-    private final ExtractData extractData;
-    private final WebClient webClient;
-    private final PredictionService service;
-
+    private final AutomaticBetService betController;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -28,17 +20,8 @@ public class Main implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws IOException, InterruptedException {
-        System.out.println("=======main======");
-
-        List<DataResponse> entities = extractData.extractionDataFromSite("Excelsior", "Jong Utrecht");
-        entities.forEach(dataResponse -> System.out.println(dataResponse.getEventName()));
-        System.out.println(service.getPrediction());
-
-
-        System.out.println("=======done==========");
-
+        betController.createCoupon();
     }
-
 
 }
 
