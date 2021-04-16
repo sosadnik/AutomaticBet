@@ -17,15 +17,16 @@ public class AutomaticBetService {
     private final WebClient webClient;
     private final PredictionService service;
 
+
     public void createCoupon() throws IOException, InterruptedException {
         List<Prediction> bet = new ArrayList<>();
-
         for (Prediction coupon : service.getPrediction()) {
             if (rateOfAllOdds(bet) > 2.0 & bet.size() > 1) {
                 placeCoupon(bet);
                 bet.clear();
-
-            } else if (coupon.getStatus().equals("pending") & !extractData.extractionDataFromSite(coupon.getHomeTeam(), coupon.getAwayTeam()).isEmpty()) {
+            } else if (coupon.getStatus().equals("pending") & !extractData.extractionDataFromSite(
+                    coupon.getHomeTeam(),
+                    coupon.getAwayTeam()).isEmpty()) {
                 bet.add(coupon);
             }
         }
@@ -36,15 +37,25 @@ public class AutomaticBetService {
 
     public void placeCoupon(List<Prediction> list) throws IOException, InterruptedException {
         Map<String, String> cookies = webClient.login();
-        Thread.sleep(2458);
+        Thread.sleep(getRandomLong());
+
         for (Prediction bet : list) {
-            webClient.addBet(cookies, extractData.extractionDataFromSite(bet.getHomeTeam(), bet.getAwayTeam()).get(0), bet.getPrediction());
-            Thread.sleep(2100);
+            webClient.addBet(cookies, extractData.extractionDataFromSite(
+                    bet.getHomeTeam(),
+                    bet.getAwayTeam()).get(0),
+                    bet.getPrediction());
+            Thread.sleep(getRandomLong());
         }
-        Thread.sleep(3458);
+        Thread.sleep(getRandomLong());
+
         webClient.changeBetValue(cookies);
-        Thread.sleep(2622);
+        Thread.sleep(getRandomLong());
+
         webClient.placeBet(cookies);
+    }
+
+    public long getRandomLong() {
+        return (long) (2000 + (Math.random() * (4000 - 2000)));
     }
 
     public Double rateOfAllOdds(List<Prediction> list) {
@@ -54,6 +65,4 @@ public class AutomaticBetService {
                 .reduce((odds1, odds2) -> odds1 * odds2)
                 .get();
     }
-
-
 }

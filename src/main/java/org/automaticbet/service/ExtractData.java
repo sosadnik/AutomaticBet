@@ -33,6 +33,7 @@ public class ExtractData {
                     .get();
 
             for (Element row : document.select("div.markets-list")) {
+
                 dataInfo.add(row.getElementsByAttribute("data-info"));
                 marketName.add(row.select("span.market-name"));
                 dateTime.add(row.select("span.event-datetime"));
@@ -41,14 +42,19 @@ public class ExtractData {
                 Exception ex) {
             ex.printStackTrace();
         }
+
+        return filterDataResponse(dataInfo, marketName, dateTime, teamName, teamName2);
+    }
+
+    public List<DataResponse> filterDataResponse(List<Elements> dataInfo, List<Elements> marketName, List<Elements> dateTime, String teamName, String teamName2) {
         List<DataResponse> dataResponseList = checkingDate(dataInfo, marketName, dateTime);
 
-        dataResponseList = dataResponseList.stream()
-                .filter(dataResponse -> containsInscription(dataResponse.getEventName(), Arrays.asList(teamName.split(" ")), 1))
-                .filter(dataResponse -> containsInscription(dataResponse.getEventName(), Arrays.asList(teamName2.split(" ")), 2))
+        return dataResponseList.stream()
+                .filter(dataResponse -> containsInscription(dataResponse.getEventName(),
+                        Arrays.asList(teamName.split(" ")), 1))
+                .filter(dataResponse -> containsInscription(dataResponse.getEventName(),
+                        Arrays.asList(teamName2.split(" ")), 2))
                 .collect(toList());
-
-        return dataResponseList;
     }
 
     public boolean containsInscription(String marketName, List<String> name, int teamNumber) {
@@ -84,6 +90,7 @@ public class ExtractData {
         for (String s : list) {
             for (String value : listTwo) {
                 if (s.contains(value)) contains = true;
+                else contains = false;
             }
         }
         return contains;

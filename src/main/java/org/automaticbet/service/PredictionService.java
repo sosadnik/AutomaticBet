@@ -13,12 +13,13 @@ import java.util.List;
 public class PredictionService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String PREDYCTION_URL = "http://localhost:8080/api/getPrediction";
+    private static final String PREDICTION_URL = "http://localhost:8080/api/getPrediction";
 
-    public List<Prediction> getPrediction(){
-       Prediction[] response = restTemplate.getForObject(
-                PREDYCTION_URL,
+    public List<Prediction> getPrediction() {
+        Prediction[] response = restTemplate.getForObject(
+                PREDICTION_URL,
                 Prediction[].class);
+        assert response != null;
         return Arrays.asList(response);
     }
 
