@@ -13,10 +13,8 @@ import java.util.Map;
 public class WebClient {
     public static String DEFAULT_USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36";
 
-    public Map<String, String> login() throws IOException {
+    public Map<String, String> login(String username, String password) throws IOException {
         String loginActionUrl = "https://www.efortuna.pl/client_security_check";
-        String username = "agzer";
-        String password = "L4GRB08CsrQp7HxNQptgYOBgAFCA8OBo";
         HashMap<String, String> formData = new HashMap<>();
 
         formData.put("username", username);

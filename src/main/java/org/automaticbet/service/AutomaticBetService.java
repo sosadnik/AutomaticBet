@@ -18,11 +18,11 @@ public class AutomaticBetService {
     private final PredictionService service;
 
 
-    public void createCoupon() throws IOException, InterruptedException {
+    public void createCoupon(String username, String password) throws IOException, InterruptedException {
         List<Prediction> bet = new ArrayList<>();
         for (Prediction coupon : service.getPrediction()) {
             if (rateOfAllOdds(bet) > 2.0 & bet.size() > 1) {
-                placeCoupon(bet);
+                placeCoupon(bet, username, password);
                 bet.clear();
             } else if (coupon.getStatus().equals("pending") & !extractData.extractionDataFromSite(
                     coupon.getHomeTeam(),
@@ -31,12 +31,12 @@ public class AutomaticBetService {
             }
         }
         if (rateOfAllOdds(bet) > 2.0 & bet.size() > 1) {
-            placeCoupon(bet);
+            placeCoupon(bet, username, password);
         }
     }
 
-    public void placeCoupon(List<Prediction> list) throws IOException, InterruptedException {
-        Map<String, String> cookies = webClient.login();
+    public void placeCoupon(List<Prediction> list, String username, String password) throws IOException, InterruptedException {
+        Map<String, String> cookies = webClient.login(username, password);
         Thread.sleep(getRandomLong());
 
         for (Prediction bet : list) {
