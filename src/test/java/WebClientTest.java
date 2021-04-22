@@ -39,13 +39,12 @@ public class WebClientTest {
 
     @Test
     public void getPredictionIndex_ShouldReturnIntTest() {
-        //given
         String prediction = "1";
 
-        //when
+
         int actual = webClient.getPredictionIndex(prediction);
 
-        //then
+
         assertEquals((0), actual);
     }
 
@@ -62,18 +61,11 @@ public class WebClientTest {
     public void login_ShouldReturnMapTest() throws IOException {
         Map<String, String> actualMap;
 
-        actualMap = webClient.login();
+        actualMap = webClient.login("testUsername", "testPassword");
 
 
         assertNotEquals(null, actualMap);
     }
-
-//    @Test
-//    public void login_ShouldReturnHttpResponseCodeOKTest() throws IOException {
-//        int actual = webClient.login().statusCode();
-//
-//        assertEquals(200, actual);
-//    }
 
 
     @Test
